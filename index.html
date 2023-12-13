@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technology Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(45deg, #0d3b66, #0d3b66, #4281a4); 
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            color: white;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            width: 700px;
+            background: rgba(255, 255, 255, 0.1); 
+            padding: 20px 40px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px); 
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #timer {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            border: 2px solid #3498db; 
+            border-radius: 50%;
+            background: #3498db; 
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .container .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .container button {
+            border: 2px solid #61dafb; 
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            background-color: #61dafb; 
+            color: #282c34; 
+            transition: background-color 0.3s, color 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .container button:hover {
+            background-color: #282c34; 
+            color: #61dafb;
+        }
+
+        .container .buttons button {
+            width: 300px;
+            min-height: 50px;
+            padding: 10px 15px;
+            font-size: 17px;
+        }
+
+        .newBtn {
+            padding: 10px 30px;
+            background-color: #020202; 
+            margin-top: 30px;
+            font-size: 20px;
+            color: #282c34; 
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .newBtn:hover {
+            background-color: #282c34; 
+            color: #61dafb; 
+        }
+
+        h1 {
+            text-align: center;
+            color: #61dafb; 
+            margin-bottom: 20px;
+        }
+
+        #score {
+            font-size: 2em;
+            color: #61dafb; 
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 679px) {
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>Score: <span id="score">0</span>/5</header>
+    <h1 id="timer">20</h1>
+    <section>
+        <div class="container"></div>
+    </section>
+
+    <script>
+        let timer;
+        let countTime = 20;
+
+        function updateTimer() {
+            const timerElement = document.getElementById('timer');
+
+            if (countTime <= 0) {
+                timerElement.innerHTML = 'Time is up!';
+            } else {
+                timerElement.innerText = countTime;
+                timer = setTimeout(updateTimer, 1000);
+                countTime--;
+            }
+        }
+
+        const array = [
+            {
+                Q: "1. What is the Full Form Of HTML?",
+                options: ["Hyper Text MarkUp Language", "Hyper Text MakeUp Landguage", "Hyper Transfer MarkUp Language", "High Text MarkUp Langguage"],
+                correct: 0
+            },
+            {
+                Q: "2. What is C++?",
+                options: ["Scripting language", "Programming language", "MarkUp language", "None Of these"],
+                correct: 1
+            },
+            {
+                Q: "3. What is CSS?",
+                options: ["Cascading Style Sheet", "Create Style Sheet", "Cascading Shrink Style", "None Of these"],
+                correct: 0
+            },
+            {
+                Q: "4. Who is the creator of HTML?",
+                options: ["Bjarne Stroustrup", "Guido van Rossum", "Brendan Eich", "Tim Berners-Lee"],
+                correct: 3
+            },
+            {
+                Q: "5. How to vibrate a device using JS?",
+                options: ["window.vibrate()", "document.vibrate", "navigator.vibrate()", "Can't vibrate using JS"],
+                correct: 2
+            }
+        ];
+
+        const container = document.querySelector('.container');
+        const scoreContainer = document.querySelector('#score');
+        let index = 0;
+        let score = 0;
+
+        function check(e, index) {
+            const btns = document.querySelectorAll('button');
+            const answer = array[index].options[array[index].correct];
+
+            if (e.innerText != answer) {
+                console.log(index);
+                e.style.background = '#f00';
+                btns[array[index].correct].style.background = '#00d600';
+            } else {
+                score++;
+                scoreContainer.innerText = score;
+                btns[array[index].correct].style.background = '#00d600';
+            }
+
+            btns.forEach(element => {
+                element.removeAttribute('onclick');
+            });
+
+            const newBtn = document.createElement('button');
+            newBtn.setAttribute('class', 'newBtn');
+
+            if (index == array.length - 1) {
+                newBtn.innerText = 'Finish Quiz';
+                newBtn.setAttribute('onclick', 'finishQuiz()');
+            } else {
+                newBtn.innerText = 'Next';
+                newBtn.setAttribute('onclick', 'display()');
+            }
+            container.appendChild(newBtn);
+        }
+
+        function finishQuiz() {
+            clearTimeout(timer);
+            container.innerHTML = `<h1>Quiz Finished! Your Score: ${score}/5</h1>`;
+
+            const restartBtn = document.createElement('button');
+            restartBtn.setAttribute('class', 'newBtn');
+            restartBtn.innerText = 'Restart Quiz';
+            restartBtn.setAttribute('onclick', 'restartQuiz()');
+            container.appendChild(restartBtn);
+        }
+
+        function restartQuiz() {
+            countTime = 20;
+            index = 0;
+            score = 0;
+            scoreContainer.innerText = score;
+            display();
+        }
+
+        function display() {
+            clearTimeout(timer);
+            countTime = 20;
+            updateTimer();
+
+            let html = `<h1>Question: ${array[index].Q}</h1>
+                <div class="buttons">
+                    <button onclick='check(this, ${index})'>${array[index].options[0]}</button>
+                    <button onclick='check(this, ${index})'>${array[index].options[1]}</button>
+                    <button onclick='check(this, ${index})'>${array[index].options[2]}</button>
+                    <button onclick='check(this, ${index})'>${array[index].options[3]}</button>
+                </div>`;
+            container.innerHTML = html;
+            index++;
+        }
+
+        display();
+    </script>
+</body>
+</html>
